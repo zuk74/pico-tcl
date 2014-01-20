@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.dirname(__FILE__)+'/../lib'
+require 'pico-tcl'
+
+if ARGV.size == 1
+
+  begin
+    File.open(ARGV[0]) do |f|
+      interp = PicoTcl::Interp.new
+      interp.eval(f.read)
+    end
+  rescue => e
+    puts e
+  end
+
+else
+
+  interp = PicoTcl::Interp.new
+  cnt = 0
+  loop do
+    print "pico-tcl> "
+    line = STDIN.gets
+    begin
+      ret = interp.eval(line)
+      if ret.size != 0
+        puts "[#{cnt}] "+ret
+        cnt += 1
+      end
+    rescue => e
+      puts e
+    end
+  end
+
+end
+
+
+__END__
+
+usage:
+  $ pico-tcl hoge.tcl
+
