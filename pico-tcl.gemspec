@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pico/tcl/version'
+require 'pico-tcl/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "pico-tcl"
-  spec.version       = Pico::Tcl::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["TODO: Write your email address"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.version       = PicoTcl::VERSION
+  spec.authors       = ["Shingo-Zukunashi"]
+  spec.email         = ["shingo.zukunashi@gmail.com"]
+  spec.description   = %q{small Tcl interpreter with Ruby.}
+  spec.summary       = %q{small Tcl interpreter with Ruby.}
+  spec.homepage      = "https://github.com/zuk74"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

@@ -21,6 +21,9 @@ class PicoTcl::Scanner < StringScanner
           return ss.string[start_p..end_p]
         end
         level -= 1
+#      when ss.scan(/[^\\]\n/m)
+#        end_p = ss.pos-2
+#        raise "Syntax Error, closed \"]\"\n"+"#{ss.string[(start_p-1)..end_p]}"
       when ss.scan(/./m)
         #nothing
       end
@@ -55,7 +58,15 @@ class PicoTcl::Scanner < StringScanner
     return {type: :eos, str: nil}
   end
 
-  def get_commands
+  def each_token
+    loop do
+      token = get_token
+      break if token[:type] == :eos
+      yield(token[:type],token[:str])
+    end
+  end
+
+  def each_command
     command_list = []
     loop do
       args = []
@@ -78,6 +89,14 @@ class PicoTcl::Scanner < StringScanner
       end
     end
     command_list
+  end
+
+  def each_list
+    each_token do |type,str|
+      next if (type == :sep and str != ";") or
+              type == :space
+      yield(str)
+    end
   end
 end
 

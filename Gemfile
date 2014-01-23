@@ -1,4 +1,8 @@
-source 'https://rubygems.org'
+source :rubygems
 
-# Specify your gem's dependencies in pico-tcl.gemspec
-gemspec
+gem "rake"
+
+group :development do
+  gem "bundler"
+  gem "rspec"
+end

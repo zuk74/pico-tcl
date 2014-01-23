@@ -5,18 +5,32 @@ class PicoTcl::Interp
 
   def initialize
     @variables = {}
+    @val_stack = [@variables]
+    @loop_depth = 0
+    @loop_stack = [@loop_depth]
+    @tcl_break = false
+    @tcl_return = nil
+    @tcl_continue = false
   end
   attr_reader :variables
 
   def eval text
     ret_code = ""
+    @tcl_return = nil
+    @tcl_break = false
     s = PicoTcl::Scanner.new text
-    s.get_commands do |line|
+    s.each_command do |line|
       cmd = line.shift
-#      puts "command #{cmd}"
+#      puts "command #{cmd} -- #{line}"
+      next if @tcl_continue
       ret_code = send("command_#{cmd}".to_sym, line)
+      break if @tcl_break
+      if @tcl_return
+        ret_code = @tcl_return
+        break
+      end
     end
-    ret_code = "" until ret_code
+    ret_code = "" unless ret_code
     ret_code
   end
 
@@ -26,10 +40,23 @@ class PicoTcl::Interp
     end
   end
 
+  def stack_push
+    @val_stack.push @variables
+    @variables = {}
+    @loop_stack.push @loop_depth
+    @loop_depth = 0
+  end
+
+  def stack_pop
+    @variables = nil
+    @variables = @val_stack.pop
+    @loop_depth = @loop_stack.pop
+  end
+
   def replace_var text
     ret_text = text.dup
     @variables.each do |k,v|
-      ret_text.gsub!(/\$#{k}/, v)
+      ret_text.gsub!(/\$#{k}\b|\${#{k}}/, v)
     end
     ret_text
   end
@@ -43,55 +70,35 @@ class PicoTcl::Interp
     end
   end
 
+  def expand_condition text
+    top_eval( expand_all(erase_bracket(text)) )
+  end
+
   def bracket? text
     text.match(/^{.*}$/m)
   end
 
-  def command_set args
-    raise "error" until args.size == 2
-    @variables[args[0].to_sym] = expand_all(args[1])
+  def erase_bracket text
+    if text =~ /^{(.*)}$/m
+      $1
+    else
+      text
+    end
   end
 
-  def command_expr args
-    top_eval replace_var(
-      args.map{|x| replace_brace(x)}.join("") )
+  def find_var?(name)
+    @variables.key?(name.to_sym)
   end
 
-  def command_puts args
-    raise "error" until args.size == 1
-    ret = expand_all(args[0])
-    puts ret
-    ret
+  def set_var name, val
+    @variables[name.to_sym] = val
   end
 
-  def command_if args
-    raise "error" until args.size >= 2 and args.size%3 != 0
-    if args.size > 2
-      2.step(args.size,3) do |n|
-        if n+2 < args.size #elseif
-          raise "error elseif" until args[n] == "elseif"
-        else #else
-          raise "error else" until args[n] == "else"
-        end
-      end
+  def get_var name
+    unless find_var?(name)
+      raise "Error can not found variable #{name.inspect}"
     end
-
-    if top_eval( expand_all(expand_all(args[0])) )
-      return self.eval( expand_all(args[1]) )
-    end
-    if args.size > 2
-      2.step(args.size,3) do |n|
-        if n+2 < args.size #elseif
-#          raise "error elseif" until args[n] == "elseif"
-          if top_eval( expand_all(expand_all(args[n+1])) )
-            return self.eval( expand_all(args[n+2]) )
-          end
-        else #else
-#          raise "error else" until args[n] == "else"
-          return self.eval( expand_all(args[n+1]) )
-        end
-      end
-    end
+    @variables[name.to_sym]
   end
 
 end

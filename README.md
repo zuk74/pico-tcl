@@ -1,6 +1,6 @@
 # Pico::Tcl
 
-TODO: Write a gem description
+Small Tcl interperter.
 
 ## Installation
 
