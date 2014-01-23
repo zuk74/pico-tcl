@@ -62,7 +62,9 @@ class PicoTcl::Scanner < StringScanner
     loop do
       token = get_token
       break if token[:type] == :eos
-      yield(token[:type],token[:str])
+      unless token[:type] == :comment
+        yield(token[:type],token[:str])
+      end
     end
   end
 
@@ -75,7 +77,7 @@ class PicoTcl::Scanner < StringScanner
         token = get_token
         break if token[:type] == :eos
         break if token[:type] == :sep and args.size != 0
-        if token[:type] != :space and token[:type] != :sep
+        unless token[:type] == :space or token[:type] == :sep or token[:type] == :comment
           args << token[:str]
         end
       end
