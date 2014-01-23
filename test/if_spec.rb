@@ -19,6 +19,23 @@ describe PicoTcl::Interp do
     ").should == ""
   end
 
+# TODO: 0 or 1
+#  it "if2" do
+#    ip = PicoTcl::Interp.new
+#    ip.eval("if 1 {
+#          set a 10
+#        }
+#    ").should == "10"
+#  end
+#
+#  it "if3" do
+#    ip = PicoTcl::Interp.new
+#    ip.eval("if 0 {
+#          set a 10
+#        }
+#    ").should == ""
+#  end
+
   it "if-else2" do
     ip = PicoTcl::Interp.new
     ip.eval("set a 10")
