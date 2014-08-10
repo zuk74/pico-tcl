@@ -5,18 +5,18 @@ describe PicoTcl::Interp do
 
   it "if0" do
     ip = PicoTcl::Interp.new
-    ip.eval("if { 10 < 20 } {
+    expect( ip.eval("if { 10 < 20 } {
           set a 10
         }
-    ").should == "10"
+    ") ).to eq "10"
   end
 
   it "if1" do
     ip = PicoTcl::Interp.new
-    ip.eval("if { 10 > 20 } {
+    expect( ip.eval("if { 10 > 20 } {
           set a 10
         }
-    ").should == ""
+    ") ).to eq ""
   end
 
 # TODO: 0 or 1
@@ -39,42 +39,42 @@ describe PicoTcl::Interp do
   it "if-else2" do
     ip = PicoTcl::Interp.new
     ip.eval("set a 10")
-    ip.eval("if { $a < 20 } {
+    expect( ip.eval("if { $a < 20 } {
           set a 10
         } else {
           set a 20
         }
-    ").should == "10"
+    ") ).to eq "10"
   end
 
   it "if-else1" do
     ip = PicoTcl::Interp.new
     ip.eval("set a 10")
-    ip.eval("if { $a < 5 } {
+    expect( ip.eval("if { $a < 5 } {
           set a 10
         } else {
           set a 20
         }
-    ").should == "20"
+    ") ).to eq "20"
   end
 
   it "if-elseif-else" do
     ip = PicoTcl::Interp.new
     ip.eval("set a 10")
-    ip.eval("if { $a < 5 } {
+    expect( ip.eval("if { $a < 5 } {
           set a 10
         } elseif { $a > 5} {
           set a 50
         } else {
           set a 20
         }
-    ").should == "50"
+    ") ).to eq "50"
   end
 
   it "if-elseif-else2" do
     ip = PicoTcl::Interp.new
     ip.eval("set a 10")
-    ip.eval("if { $a < 5 } {
+    expect( ip.eval("if { $a < 5 } {
           set a 10
         } elseif {$a == 5} {
           set a 50
@@ -83,7 +83,7 @@ describe PicoTcl::Interp do
         } else {
           set a 20
         }
-    ").should == "100"
+    ") ).to eq "100"
   end
 
 end

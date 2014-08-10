@@ -5,13 +5,13 @@ describe PicoTcl::Interp do
 
   it "foreach0" do
     ip = PicoTcl::Interp.new
-    ip.eval("set a {}").should == ""
-    ip.eval("
+    expect( ip.eval("set a {}") ).to eq ""
+    expect( ip.eval("
         foreach i {a b c d e f} {
           set a \"$i,$a\"
         }
-    ").should == ""
-    ip.eval("set val $a").should == "f,e,d,c,b,a,"
+    ") ).to eq ""
+    expect( ip.eval("set val $a") ).to eq "f,e,d,c,b,a,"
   end
 
 end

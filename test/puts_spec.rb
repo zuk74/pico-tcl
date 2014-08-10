@@ -8,8 +8,8 @@ describe PicoTcl::Interp do
     ip = PicoTcl::Interp.new
     str = ""
     $stdout = StringIO.new(str)
-    ip.eval("puts {hello}").should == ""
-    str.should == "hello\n"
+    expect( ip.eval("puts {hello}") ).to eq ""
+    expect( str ).to eq "hello\n"
     $stdout = STDOUT
   end
 end

@@ -4,19 +4,19 @@ require 'pico-tcl'
 describe PicoTcl::Interp do
   it "while1" do
     ip = PicoTcl::Interp.new
-    ip.eval("set a 0").should == "0"
-    ip.eval("
+    expect( ip.eval("set a 0") ).to eq "0"
+    expect( ip.eval("
         while { $a < 10 } {
           set a [expr $a + 1]
         }
         set b $a
-      ").should == "10"
+      ") ).to eq "10"
   end
 
   it "while2" do
     ip = PicoTcl::Interp.new
-    ip.eval("set a 0").should == "0"
-    ip.eval("
+    expect( ip.eval("set a 0") ).to eq "0"
+    expect( ip.eval("
         while { $a < 10 } {
           set a [expr $a + 1]
           if { $a == 5 } {
@@ -24,13 +24,13 @@ describe PicoTcl::Interp do
           }
         }
         set b $a
-      ").should == "5"
+      ") ).to eq "5"
   end
 
   it "while3" do
     ip = PicoTcl::Interp.new
-    ip.eval("set a 0").should == "0"
-    ip.eval("
+    expect( ip.eval("set a 0") ).to eq "0"
+    expect( ip.eval("
         while { $a < 10 } {
           if { $a == 5 } {
             break
@@ -38,13 +38,13 @@ describe PicoTcl::Interp do
           set a [expr $a + 1]
         }
         set b $a
-      ").should == "5"
+      ") ).to eq "5"
   end
 
   it "while4" do
     ip = PicoTcl::Interp.new
-    ip.eval("set a 0").should == "0"
-    ip.eval("
+    expect( ip.eval("set a 0") ).to eq "0"
+    expect( ip.eval("
         set c 0
         while { $a < 10 } {
           set d 0
@@ -62,7 +62,7 @@ describe PicoTcl::Interp do
           set a [expr $a + 1]
         }
         set b $c
-      ").should == "18"
+      ") ).to eq "18"
   end
 
 end

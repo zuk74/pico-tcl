@@ -6,18 +6,18 @@ describe PicoTcl::Interp do
   it "for0" do
     ip = PicoTcl::Interp.new
     ip.eval("set a {}")
-    ip.eval("
+    expect( ip.eval("
         for {set i 0} {$i < 5} {incr i} {
           set a \"$a,$i\"
         }
         set val $a
-    ").should == ",0,1,2,3,4"
+    ") ).to eq ",0,1,2,3,4"
   end
 
   it "for-break" do
     ip = PicoTcl::Interp.new
     ip.eval("set a {}")
-    ip.eval("
+    expect( ip.eval("
         for {set i 0} {$i < 5} {incr i} {
           if {$i > 3} {
             break
@@ -25,7 +25,7 @@ describe PicoTcl::Interp do
           set a \"$a,$i\"
         }
         set val $a
-    ").should == ",0,1,2,3"
+    ") ).to eq ",0,1,2,3"
   end
 
 end
